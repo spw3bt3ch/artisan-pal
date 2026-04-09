@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artisan-Pal AI | Mobile Optimized</title>
+    <title>Artisan-Pal AI | Secure Gateway</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -12,149 +12,109 @@
     <style>
         [x-cloak] { display: none !important; }
         body { font-family: 'Inter', sans-serif; background: #020617; color: #f8fafc; }
-        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .hero-gradient { background: radial-gradient(circle at 50% 0%, #1e1b4b, #020617); }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
         .text-gradient { background: linear-gradient(135deg, #fff 0%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        /* Prevent horizontal scroll on mobile */
-        html, body { overflow-x: hidden; width: 100%; position: relative; }
+        input:focus { border-color: #6366f1 !important; box-shadow: 0 0 15px rgba(99, 102, 241, 0.2); }
     </style>
 </head>
-<body x-data="artisanApp()" class="hero-gradient min-h-screen">
+<body x-data="artisanApp()">
 
-    <div x-show="showModal" x-transition x-cloak class="fixed inset-0 z-[100] flex items-end md:items-center justify-center px-0 md:px-4">
-        <div @click="showModal = false" class="absolute inset-0 bg-black/90 backdrop-blur-md"></div>
-        <div class="glass w-full max-w-lg rounded-t-[2rem] md:rounded-[2rem] p-6 md:p-10 relative z-10 border-t md:border border-white/10">
-            <div class="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6 md:hidden"></div>
-            <h2 class="text-2xl md:text-3xl font-bold mb-2 text-white text-center md:text-left">Secure <span class="text-indigo-400">Match</span></h2>
-            <p class="text-slate-400 mb-8 text-center md:text-left text-sm">Booking: <span x-text="selectedArtisan?.name" class="font-bold text-white"></span></p>
-            <form @submit.prevent="alert('Request sent!'); showModal = false" class="space-y-4">
-                <input type="date" required class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 outline-none focus:border-indigo-500 text-white">
-                <textarea required class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 outline-none focus:border-indigo-500 h-28 text-white" placeholder="What do you need help with?"></textarea>
-                <button class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-indigo-500 transition-all">Confirm Booking</button>
-            </form>
+    <div x-show="showLogin" x-transition x-cloak class="fixed inset-0 z-[110] flex items-center justify-center px-4">
+        <div @click="showLogin = false" class="absolute inset-0 bg-black/95 backdrop-blur-md"></div>
+        
+        <div class="glass w-full max-w-md rounded-[2.5rem] overflow-hidden relative z-10 border border-white/10 shadow-2xl">
+            <button @click="showLogin = false" class="absolute top-6 right-6 text-slate-500 hover:text-white transition z-20">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+
+            <div class="p-8 md:p-10">
+                <div class="text-center mb-8">
+                    <div class="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user-shield text-white text-xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-black text-white tracking-tighter">Secure Login</h2>
+                    <p class="text-slate-400 text-sm mt-1">Select your role to continue</p>
+                </div>
+
+                <div class="flex p-1 bg-white/5 rounded-2xl mb-8 border border-white/5">
+                    <button @click="userRole = 'client'" 
+                        :class="userRole === 'client' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'"
+                        class="flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all">
+                        <i class="fas fa-search mr-2"></i> Client
+                    </button>
+                    <button @click="userRole = 'artisan'" 
+                        :class="userRole === 'artisan' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'"
+                        class="flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all">
+                        <i class="fas fa-tools mr-2"></i> Artisan
+                    </button>
+                </div>
+
+                <form @submit.prevent="alert('Logged in as ' + userRole); showLogin = false" class="space-y-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Email Address</label>
+                        <input type="email" placeholder="name@domain.com" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none text-white transition-all" required>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center px-1">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Password</label>
+                            <a href="#" class="text-[10px] text-indigo-400 font-bold hover:text-indigo-300">Forgot?</a>
+                        </div>
+                        <input type="password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none text-white transition-all" required>
+                    </div>
+
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-5 rounded-2xl font-bold text-lg shadow-xl shadow-indigo-500/20 transition-all transform active:scale-95 mt-4">
+                        <span x-text="userRole === 'client' ? 'Find Artisans' : 'Access Dashboard'"></span>
+                    </button>
+                </form>
+
+                <div class="mt-8 pt-6 border-t border-white/5 text-center">
+                    <p class="text-slate-500 text-xs">
+                        Don't have an account? <a href="#" class="text-white font-bold hover:underline">Sign up</a>
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <nav class="fixed w-full z-50 glass border-b border-white/5 px-4 md:px-8 py-4">
+    <nav class="fixed w-full z-50 glass border-b border-white/5 px-6 py-5">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                    <i class="fas fa-microchip text-white text-xs"></i>
+            <div class="flex items-center space-x-3 cursor-pointer">
+                <div class="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-bolt text-white text-sm"></i>
                 </div>
-                <span class="text-lg md:text-xl font-bold tracking-tighter text-white">ArtisanPal<span class="text-indigo-500">.ai</span></span>
+                <span class="text-xl font-bold tracking-tighter text-white">ArtisanPal<span class="text-indigo-500">.ai</span></span>
             </div>
-            <div class="flex items-center space-x-4">
-                <span class="hidden sm:inline text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-1 rounded-md">LIVE</span>
-                <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold text-[10px] md:text-xs uppercase tracking-widest">Login</button>
-            </div>
+            <button @click="showLogin = true" class="bg-white/5 border border-white/10 text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+                Login
+            </button>
         </div>
     </nav>
 
-    <section class="relative pt-32 md:pt-48 pb-16 md:pb-32 px-4 md:px-6 overflow-hidden">
-        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12">
-            
-            <div class="w-full lg:w-3/5 text-center lg:text-left" data-aos="fade-up">
-                <div class="inline-flex items-center space-x-2 bg-indigo-500/10 border border-indigo-500/20 px-4 py-2 rounded-full mb-6">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                    </span>
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-indigo-300">Verified AI Matching</span>
-                </div>
-                
-                <h1 class="text-4xl sm:text-6xl md:text-8xl font-black text-white leading-[1.1] mb-6 tracking-tighter">
-                    Crafting <br><span class="text-gradient">Reliability.</span>
-                </h1>
-                
-                <p class="text-base md:text-xl text-slate-400 max-w-xl mx-auto lg:mx-0 leading-relaxed mb-8 md:mb-10">
-                    Eliminate the guesswork. Our neural engine connects you with elite, vetted artisans in a verified digital ecosystem.
-                </p>
-                
-                <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto lg:mx-0">
-                    <div class="glass p-1.5 rounded-2xl flex-grow flex border-white/10">
-                        <input type="text" x-model="searchQuery" placeholder="Try 'Plumber'..." class="bg-transparent px-4 py-3 flex-grow outline-none text-white text-sm w-full">
-                        <button class="bg-indigo-600 px-5 py-3 rounded-xl font-bold text-white text-sm shrink-0">Find</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="hidden lg:block w-full lg:w-2/5 relative" data-aos="fade-left">
-                <div class="absolute -inset-10 bg-indigo-500/10 blur-[100px] rounded-full"></div>
-                <div class="glass rounded-[2.5rem] p-8 border-white/10 transform rotate-2">
-                    <div class="space-y-6">
-                        <div class="flex items-center justify-between border-b border-white/5 pb-4">
-                            <span class="text-xs font-bold text-slate-500">Processing Data</span>
-                            <span class="text-emerald-400 text-[10px] font-bold">12ms Response</span>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="h-12 bg-white/5 rounded-xl border border-white/5 animate-pulse"></div>
-                            <div class="h-12 bg-white/5 rounded-xl border border-white/5 animate-pulse delay-75"></div>
-                            <div class="h-12 bg-white/5 rounded-xl border border-white/5 animate-pulse delay-150"></div>
-                        </div>
-                    </div>
-                </div>
+    <header class="pt-48 pb-32 px-6 text-center">
+        <div data-aos="fade-up">
+            <h1 class="text-5xl md:text-8xl font-black text-white leading-tight mb-8 tracking-tighter">
+                Expert Hands, <br><span class="text-gradient">AI Precision.</span>
+            </h1>
+            <p class="text-slate-400 max-w-xl mx-auto mb-12 text-lg leading-relaxed">
+                Connect with verified local artisans or manage your trade business with our intelligent matching ecosystem.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <button @click="showLogin = true; userRole = 'client'" class="px-8 py-5 bg-indigo-600 rounded-2xl font-bold text-white hover:shadow-2xl hover:shadow-indigo-500/30 transition-all">I need an Artisan</button>
+                <button @click="showLogin = true; userRole = 'artisan'" class="px-8 py-5 glass rounded-2xl font-bold text-white hover:bg-white/5 transition-all">I am an Artisan</button>
             </div>
         </div>
-    </section>
+    </header>
 
-    <section id="marketplace" class="max-w-7xl mx-auto px-4 md:px-6 py-12">
-        <div class="flex space-x-3 overflow-x-auto pb-6 scrollbar-hide no-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
-            <template x-for="cat in categories">
-                <button @click="activeCategory = cat" 
-                    :class="activeCategory === cat ? 'bg-white text-black' : 'glass text-slate-500 hover:text-white'"
-                    class="whitespace-nowrap px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all" 
-                    x-text="cat"></button>
-            </template>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            <template x-for="artisan in filteredArtisans" :key="artisan.id">
-                <div class="glass rounded-[2rem] p-6 md:p-8 group hover:bg-white/5 transition-all duration-500" data-aos="fade-up">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="relative">
-                            <img :src="artisan.image" class="w-16 h-16 md:w-20 md:h-20 rounded-[1.2rem] md:rounded-[1.5rem] object-cover">
-                            <div class="absolute -top-1 -right-1 bg-indigo-600 w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#020617]">
-                                <i class="fas fa-check text-[6px] text-white"></i>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-xl md:text-2xl font-black text-white" x-text="artisan.match + '%'"></div>
-                            <div class="text-[9px] font-bold text-indigo-400 uppercase tracking-tighter">AI Match</div>
-                        </div>
-                    </div>
-                    <h3 class="text-xl md:text-2xl font-bold text-white mb-1" x-text="artisan.name"></h3>
-                    <p class="text-slate-500 text-xs md:text-sm mb-6 capitalize" x-text="artisan.category + ' • Certified'"></p>
-                    <button @click="selectedArtisan = artisan; showModal = true" class="w-full bg-white/5 border border-white/10 text-white py-4 rounded-xl font-bold hover:bg-white hover:text-black transition-all text-sm">Request Service</button>
-                </div>
-            </template>
-        </div>
-    </section>
-
-    <footer class="mt-20 border-t border-white/5 bg-slate-950/30">
-        <div class="max-w-7xl mx-auto px-6 py-12">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
-                <div class="text-center md:text-left">
-                    <div class="flex items-center justify-center md:justify-start space-x-2 mb-4">
-                        <div class="w-6 h-6 bg-indigo-600 rounded flex items-center justify-center">
-                            <i class="fas fa-bolt text-white text-[10px]"></i>
-                        </div>
-                        <span class="text-lg font-bold tracking-tighter text-white">ArtisanPal.ai</span>
-                    </div>
-                    <p class="text-slate-500 text-xs max-w-xs mx-auto md:mx-0">
-                        Next-generation infrastructure for local artisan commerce.
-                    </p>
-                </div>
-                
-                <div class="flex flex-col items-center md:items-end gap-4 border-t border-white/5 pt-8 md:pt-0 md:border-none w-full md:w-auto">
-                    <div class="flex space-x-6">
-                        <a href="#" class="text-slate-600 hover:text-white transition text-lg"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="text-slate-600 hover:text-white transition text-lg"><i class="fab fa-twitter"></i></a>
-                    </div>
-                    <div class="text-center md:text-right">
-                        <span class="text-slate-600 text-[10px] font-bold tracking-[0.2em] block uppercase">An Initiative by John Joe</span>
-                        <span class="text-slate-700 text-[9px] block mt-1 uppercase">© 2026 ALL RIGHTS RESERVED</span>
-                    </div>
-                </div>
+    <footer class="mt-20 border-t border-white/5 py-12 px-8 text-center md:text-left">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3 opacity-50">
+                <div class="w-5 h-5 bg-slate-700 rounded-md flex items-center justify-center"><i class="fas fa-bolt text-[8px] text-white"></i></div>
+                <span class="text-sm font-bold tracking-tighter">ArtisanPal.ai</span>
+            </div>
+            <div class="text-center md:text-right">
+                <span class="text-slate-600 text-[10px] font-bold tracking-[0.2em] block uppercase">An Initiative by John Joe</span>
+                <span class="text-slate-700 text-[9px] block mt-1 uppercase">© 2026 ALL RIGHTS RESERVED</span>
             </div>
         </div>
     </footer>
@@ -163,22 +123,8 @@
         AOS.init({ duration: 800, once: true });
         function artisanApp() {
             return {
-                showModal: false,
-                selectedArtisan: null,
-                searchQuery: '',
-                activeCategory: 'all',
-                categories: ['all', 'barber', 'plumber', 'painter', 'carpenter'],
-                artisans: [
-                    { id: 1, name: 'Marcus Wright', category: 'barber', match: 99, image: 'https://i.pravatar.cc/150?u=11' },
-                    { id: 2, name: 'Elena Rodriguez', category: 'painter', match: 96, image: 'https://i.pravatar.cc/150?u=22' },
-                    { id: 3, name: 'Samuel Okafor', category: 'plumber', match: 94, image: 'https://i.pravatar.cc/150?u=33' }
-                ],
-                get filteredArtisans() {
-                    return this.artisans.filter(a => {
-                        return (this.activeCategory === 'all' || a.category === this.activeCategory) &&
-                               (a.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || a.category.toLowerCase().includes(this.searchQuery.toLowerCase()));
-                    });
-                }
+                showLogin: false,
+                userRole: 'client', // Default role
             }
         }
     </script>
