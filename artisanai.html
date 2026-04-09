@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artisan-Pal AI | The Future of Local Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        [x-cloak] { display: none !important; }
+        body { font-family: 'Inter', sans-serif; background: #020617; color: #f8fafc; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .hero-gradient { background: radial-gradient(circle at 50% -20%, #312e81, #020617); }
+        .text-gradient { background: linear-gradient(135deg, #fff 0%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-primary { background: #6366f1; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-primary:hover { background: #4f46e5; box-shadow: 0 0 30px rgba(99, 102, 241, 0.4); transform: translateY(-1px); }
+    </style>
+</head>
+<body x-data="artisanApp()" class="hero-gradient min-h-screen">
+
+    <div x-show="showModal" x-transition x-cloak class="fixed inset-0 z-[100] flex items-center justify-center px-4">
+        <div @click="showModal = false" class="absolute inset-0 bg-black/90 backdrop-blur-md"></div>
+        <div class="glass w-full max-w-lg rounded-[2rem] p-10 relative z-10 border border-white/10">
+            <h2 class="text-3xl font-bold mb-2 text-white">Secure your <span class="text-indigo-400">Match</span></h2>
+            <p class="text-slate-400 mb-8">Scheduling with <span x-text="selectedArtisan?.name" class="font-bold"></span></p>
+            <form @submit.prevent="alert('Request sent!'); showModal = false" class="space-y-5">
+                <input type="date" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-indigo-500">
+                <textarea required class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-indigo-500 h-32" placeholder="Project details..."></textarea>
+                <button class="btn-primary w-full text-white py-5 rounded-2xl font-bold text-lg">Send AI Request</button>
+            </form>
+        </div>
+    </div>
+
+    <nav class="fixed w-full z-50 glass border-b border-white/5 px-8 py-5">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <i class="fas fa-microchip text-white text-sm"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tighter text-white">ArtisanPal<span class="text-indigo-500">.ai</span></span>
+            </div>
+            <div class="hidden md:flex items-center space-x-10 text-sm font-medium text-slate-400">
+                <a href="#marketplace" class="hover:text-white transition">Marketplace</a>
+                <a href="#contact" class="hover:text-white transition">Enterprise</a>
+                <button class="btn-primary text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest">Launch App</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative pt-48 pb-32 px-6 overflow-hidden">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+            <div data-aos="fade-right">
+                <div class="inline-flex items-center space-x-2 bg-indigo-500/10 border border-indigo-500/20 px-4 py-2 rounded-full mb-8">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                    </span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-indigo-300">Next-Gen Service Matching</span>
+                </div>
+                <h1 class="text-6xl md:text-8xl font-black text-white leading-[1.1] mb-8 tracking-tighter">
+                    Crafting <br><span class="text-gradient">Reliability.</span>
+                </h1>
+                <p class="text-xl text-slate-400 max-w-xl leading-relaxed mb-10">
+                    Eliminate the friction of word-of-mouth. Our neural engine connects you with elite, vetted artisans in a verified digital ecosystem.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="glass p-2 rounded-2xl flex-grow max-w-md flex border-white/10">
+                        <input type="text" x-model="searchQuery" placeholder="What are you looking for?" class="bg-transparent px-6 py-3 flex-grow outline-none text-white">
+                        <button class="btn-primary px-6 py-3 rounded-xl font-bold text-white">Find</button>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden lg:block relative" data-aos="fade-left">
+                <div class="absolute -inset-10 bg-indigo-500/10 blur-[120px] rounded-full"></div>
+                <div class="glass rounded-[2.5rem] p-8 border-white/10 transform rotate-3 hover:rotate-0 transition-transform duration-700">
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Live Matches</span>
+                            <span class="text-emerald-400 text-xs font-bold">Active</span>
+                        </div>
+                        <template x-for="n in 2">
+                            <div class="flex items-center space-x-4 bg-white/5 p-4 rounded-2xl">
+                                <div class="w-12 h-12 rounded-full bg-slate-800 border border-indigo-500/30"></div>
+                                <div class="flex-grow h-3 bg-slate-800 rounded-full relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-indigo-500 w-2/3"></div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="marketplace" class="max-w-7xl mx-auto px-6 py-20">
+        <div class="flex flex-wrap justify-start gap-4 mb-16">
+            <template x-for="cat in categories">
+                <button @click="activeCategory = cat" 
+                    :class="activeCategory === cat ? 'bg-white text-black' : 'glass text-slate-500 hover:text-white'"
+                    class="px-8 py-3 rounded-2xl text-xs font-bold uppercase tracking-widest transition-all" 
+                    x-text="cat"></button>
+            </template>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <template x-for="artisan in filteredArtisans" :key="artisan.id">
+                <div class="glass rounded-[2rem] p-8 group hover:bg-white/5 transition-all duration-500" data-aos="fade-up">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="relative">
+                            <img :src="artisan.image" class="w-20 h-20 rounded-[1.5rem] object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                            <div class="absolute -top-2 -right-2 bg-indigo-600 w-6 h-6 rounded-full flex items-center justify-center border-4 border-[#020617]">
+                                <i class="fas fa-check text-[8px] text-white"></i>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-black text-white" x-text="artisan.match + '%'"></div>
+                            <div class="text-[10px] font-bold text-indigo-400 uppercase tracking-tighter">AI Accuracy</div>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-1" x-text="artisan.name"></h3>
+                    <p class="text-slate-500 text-sm mb-8 font-medium capitalize" x-text="artisan.category + ' • Verified Specialist'"></p>
+                    <button @click="selectedArtisan = artisan; showModal = true" class="w-full bg-white/5 border border-white/10 text-white py-4 rounded-2xl font-bold hover:bg-white hover:text-black transition-all">Request Service</button>
+                </div>
+            </template>
+        </div>
+    </section>
+
+    <footer class="mt-32 border-t border-white/5 bg-slate-950/30">
+        <div class="max-w-7xl mx-auto px-8 py-20">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-6">
+                        <div class="w-6 h-6 bg-indigo-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-bolt text-white text-[10px]"></i>
+                        </div>
+                        <span class="text-lg font-bold tracking-tighter text-white">ArtisanPal.ai</span>
+                    </div>
+                    <p class="text-slate-500 text-sm max-w-xs leading-relaxed">
+                        Setting the global standard for artisan verification and on-demand professional services.
+                    </p>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-sm mb-6">Platform</h5>
+                    <ul class="text-slate-500 text-sm space-y-4">
+                        <li><a href="#" class="hover:text-indigo-400 transition">Marketplace</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition">Vetting Process</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition">API Documentation</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-sm mb-6">Company</h5>
+                    <ul class="text-slate-500 text-sm space-y-4">
+                        <li><a href="#" class="hover:text-indigo-400 transition">Our Vision</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center space-x-4">
+                    <span class="text-slate-600 text-[11px] font-medium tracking-wide">AN INITIATIVE BY <span class="text-slate-400">JOHN JOE</span></span>
+                    <span class="w-px h-3 bg-white/10"></span>
+                    <span class="text-slate-600 text-[11px] font-medium tracking-wide">© 2026 ALL RIGHTS RESERVED</span>
+                </div>
+                <div class="flex space-x-8">
+                    <a href="#" class="text-slate-600 hover:text-white transition text-lg"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="text-slate-600 hover:text-white transition text-lg"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-slate-600 hover:text-white transition text-lg"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        AOS.init({ duration: 1000, once: true });
+        function artisanApp() {
+            return {
+                showModal: false,
+                selectedArtisan: null,
+                searchQuery: '',
+                activeCategory: 'all',
+                categories: ['all', 'barber', 'plumber', 'painter', 'carpenter'],
+                artisans: [
+                    { id: 1, name: 'Marcus Wright', category: 'barber', distance: 0.4, match: 99, image: 'https://i.pravatar.cc/150?u=11' },
+                    { id: 2, name: 'Elena Rodriguez', category: 'painter', distance: 1.2, match: 96, image: 'https://i.pravatar.cc/150?u=22' },
+                    { id: 3, name: 'Samuel Okafor', category: 'plumber', distance: 2.5, match: 94, image: 'https://i.pravatar.cc/150?u=33' }
+                ],
+                get filteredArtisans() {
+                    return this.artisans.filter(a => {
+                        return (this.activeCategory === 'all' || a.category === this.activeCategory) &&
+                               (a.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || a.category.toLowerCase().includes(this.searchQuery.toLowerCase()));
+                    });
+                }
+            }
+        }
+    </script>
+</body>
+</html>
